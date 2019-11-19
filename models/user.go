@@ -13,12 +13,23 @@ func init() {
 }
 
 type User struct {
-	Id       string `orm:"column(id);pk"`
-	Username string
-	Password string
-	Sex      int
-	Age      int
-	Phone    int
+	Id           int64
+	Username     string
+	Password     string
+	Sex          int
+	Age          int
+	Phone        string
+	Email        string
+	Avatarurl    string // 头像
+	Roleid       string //权限id
+	Pid          string //父级id
+	Systemtype   string //系统类型
+	Address      string //地址
+	Placetypes   string //商家类型
+	Generatecode string //推荐码
+	Sharemoney   string //分享金额
+	Codeurl      string //二维码图片
+	Openid       string // 小程序openid
 }
 
 func GetAllUsers() []User {
@@ -30,4 +41,16 @@ func GetAllUsers() []User {
 	if err == nil {
 	}
 	return us
+}
+
+func AddUser(user *User) (int64, error) {
+	o := orm.NewOrm()
+	id, err := o.Insert(user)
+	return id, err
+}
+
+func DeleteUser(user *User) (int64, error) {
+	o := orm.NewOrm()
+	num, err := o.Delete(user)
+	return num, err
 }
