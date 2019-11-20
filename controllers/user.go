@@ -30,6 +30,8 @@ func (this *UserController) PostData() {
 	_, error := models.AddUser(&user)
 	if error != nil {
 		this.Ctx.WriteString("服务器错误")
+	} else {
+		this.Ctx.WriteString("添加成功")
 	}
 }
 
