@@ -13,23 +13,23 @@ func init() {
 }
 
 type User struct {
-	Id           int64
-	Username     string
-	Password     string
-	Sex          int
-	Age          int
-	Phone        string
-	Email        string
-	Avatarurl    string // 头像
-	Roleid       string //权限id
-	Pid          string //父级id
-	Systemtype   string //系统类型
-	Address      string //地址
-	Placetypes   string //商家类型
-	Generatecode string //推荐码
-	Sharemoney   string //分享金额
-	Codeurl      string //二维码图片
-	Openid       string // 小程序openid
+	Id           int64  `form:"-"`
+	Username     string `form:"Username"`
+	Password     string `form:"Password"`
+	Sex          int    `form:"Sex"`
+	Age          int    `form:"Age"`
+	Phone        string `form:"Phone"`
+	Email        string `form:"Email"`
+	Avatarurl    string `form:"Avatarurl"`    // 头像
+	Roleid       string `form:"Roleid"`       //权限id
+	Pid          string `form:"Pid"`          //父级id
+	Systemtype   string `form:"Systemtype"`   //系统类型
+	Address      string `form:"Address"`      //地址
+	Placetypes   string `form:"Placetypes"`   //商家类型
+	Generatecode string `form:"Generatecode"` //推荐码
+	Sharemoney   string `form:"Sharemoney"`   //分享金额
+	Codeurl      string `form:"Codeurl"`      //二维码图片
+	Openid       string `form:"Openid"`       // 小程序openid
 }
 
 func GetAllUsers() []User {
