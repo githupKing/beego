@@ -26,7 +26,7 @@ func (this *UserController) GetAll() {
 // @Success 200 {object} models.User
 // @router / [post]
 func (this *UserController) PostData() {
-	user := models.User{Username: "王永平", Password: "12346", Sex: 1, Age: 29, Phone: "13208266337", Email: "357754663@qq.com", Avatarurl: "", Roleid: "1", Pid: "1", Systemtype: "1", Address: "四川成都", Placetypes: "1", Generatecode: "12312", Sharemoney: "23", Codeurl: "1.png", Openid: "123123"}
+	user := models.User{}
 	_, error := models.AddUser(&user)
 	if error != nil {
 		this.Ctx.WriteString("服务器错误")
