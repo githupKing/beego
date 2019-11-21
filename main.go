@@ -27,34 +27,6 @@ func main() {
 
 	beego.Run()
 }
-
 func getConfig(key string) string {
 	return beego.AppConfig.String(key)
 }
-
-// $.ajax({
-// 	method:'post',
-// 	contentType:"application/json",
-// 	data:JSON.stringify({
-// 		Username   :'Username',
-// 		Password   :'Password',
-// 		Sex        :1,
-// 		Age        :25,
-// 		Phone      :'Phone',
-// 		Email      :'Email',
-// 		Avatarurl  :'Avatarurl',
-// 		Roleid     :'Roleid',
-// 		Pid        :'Pid',
-// 		Systemtype :'Systemtype',
-// 		Address    :'Address',
-// 		Placetypes :'Placetypes',
-// 		Generatecod:'Generatecod',
-// 		Sharemoney :'Sharemoney',
-// 		Codeurl    :'Codeurl',
-// 		Openid     :'Openid'
-// 	}),
-// 	url:"http://localhost:8080/v1/user",
-// 	success:function(res){
-// 		console.log(res)
-// 	}
-// })

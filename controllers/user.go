@@ -5,11 +5,17 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/astaxie/beego"
+	"strconv"
 )
 
 // Operations about Users
 type UserController struct {
 	beego.Controller
+}
+type jsons struct {
+	Code       int
+	Msg        string
+	Error_code int
 }
 
 // @Title GetAll
@@ -53,5 +59,24 @@ func (this *UserController) DeleteData() {
 		this.Ctx.WriteString("服务器错误")
 	} else {
 		this.Ctx.WriteString("删除成功")
+	}
+}
+
+// @Title findOne
+// @Description findOne data
+// @Success 200 {object} models.User
+// @router /findone [get]
+func (this *UserController) FindOne() {
+	id, _ := strconv.ParseInt(this.GetString("id"), 10, 64) //强类型转换
+	user, err := models.GetUserById(id)
+	datas := this.Ctx.Request
+	fmt.Println(datas.RemoteAddr)
+	if err != nil {
+		data := &jsons{100, "暂无数据", 1}
+		this.Data["json"] = data
+		this.ServeJSON()
+	} else {
+		this.Data["json"] = user
+		this.ServeJSON()
 	}
 }
