@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"beego/models"
+	"encoding/json"
 	"github.com/astaxie/beego"
 	"strconv"
 )
@@ -27,6 +28,7 @@ func (this *UserController) GetAll() {
 // @router / [post]
 func (this *UserController) PostData() {
 	user := models.User{}
+	json.Unmarshal(this.Ctx.Input.RequestBody, &user)
 	_, error := models.AddUser(&user)
 	if error != nil {
 		this.Ctx.WriteString("服务器错误")
