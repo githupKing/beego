@@ -3,8 +3,8 @@ package controllers
 import (
 	"beego/models"
 	"encoding/json"
+	"fmt"
 	"github.com/astaxie/beego"
-	"strconv"
 )
 
 // Operations about Users
@@ -28,10 +28,16 @@ func (this *UserController) GetAll() {
 // @router / [post]
 func (this *UserController) PostData() {
 	user := models.User{}
-	json.Unmarshal(this.Ctx.Input.RequestBody, &user)
+	data := this.Ctx.Input.RequestBody
+	err := json.Unmarshal(data, &user)
+	if err != nil {
+		fmt.Println("json.Unmarshal is err:", err.Error())
+	}
 	_, error := models.AddUser(&user)
 	if error != nil {
 		this.Ctx.WriteString("服务器错误")
+	} else {
+		this.Ctx.WriteString("添加成功")
 	}
 }
 
