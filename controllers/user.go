@@ -69,8 +69,25 @@ func (this *UserController) DeleteData() {
 func (this *UserController) FindOne() {
 	id, _ := strconv.ParseInt(this.GetString("id"), 10, 64) //强类型转换
 	user, err := models.GetUserById(id)
-	datas := this.Ctx.Request
-	fmt.Println(datas.RemoteAddr)
+	if err != nil {
+		data := &jsons{100, "暂无数据", 1}
+		this.Data["json"] = data
+		this.ServeJSON()
+	} else {
+		this.Data["json"] = user
+		this.ServeJSON()
+	}
+}
+
+// @Title findOne
+// @Description findOne data
+// @Success 200 {object} models.User
+// @router /finduserbyname [get]
+func (this *UserController) FindUserByName() {
+	Username := this.GetString("Username")
+	user, err := models.GetUserByName(Username)
+	fmt.Println(user)
+	fmt.Println(err)
 	if err != nil {
 		data := &jsons{100, "暂无数据", 1}
 		this.Data["json"] = data

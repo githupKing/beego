@@ -1,6 +1,7 @@
 package models
 
 import (
+	"fmt"
 	"github.com/astaxie/beego/orm"
 )
 
@@ -59,5 +60,13 @@ func GetUserById(Id int64) (user User, error error) {
 	o := orm.NewOrm()
 	user = User{Id: Id}
 	err := o.Read(&user, "Id")
+	return user, err
+}
+
+func GetUserByName(Username string) (user User, error error) {
+	o := orm.NewOrm()
+	fmt.Println(Username)
+	user = User{Username: Username}
+	err := o.Read(&user, "Username")
 	return user, err
 }
