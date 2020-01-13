@@ -21,7 +21,7 @@ type User struct {
 	Phone        string `form:"Phone"`
 	Email        string `form:"Email"`
 	Avatarurl    string `form:"Avatarurl"`    // 头像
-	Roleid       string `form:"Roleid"`       //权限id
+	Roleid       int    `form:"Roleid"`       //权限id
 	Pid          string `form:"Pid"`          //父级id
 	Systemtype   string `form:"Systemtype"`   //系统类型
 	Address      string `form:"Address"`      //地址
@@ -55,9 +55,9 @@ func DeleteUser(user *User) (int64, error) {
 	return num, err
 }
 
-func GetUserById(Id int64) (user User, error error) {
+func GetUserById(Id int64) (user User, err error) {
 	o := orm.NewOrm()
 	user = User{Id: Id}
-	err := o.Read(&user, "Id")
-	return user, err
+	err = o.Read(&user, "Id")
+	return
 }
