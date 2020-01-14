@@ -2,12 +2,27 @@ package main
 
 import (
 	_ "beego/routers"
+	"fmt"
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
 	_ "github.com/go-sql-driver/mysql"
+	"golang.org/x/crypto/bcrypt"
 )
 
 func main() {
+	password := []byte("MyDarkSecret")
+
+	// Hashing the password with the default cost of 10
+	hashedPassword, err := bcrypt.GenerateFromPassword(password, bcrypt.DefaultCost)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(hashedPassword)
+
+	// Comparing the password with the hash
+	err = bcrypt.CompareHashAndPassword(hashedPassword, password)
+	fmt.Println(err) // nil means it is a match
+
 	orm.RegisterDriver("mysql", orm.DRMySQL)
 	dataSource := getConfig("MySqlDataSource")
 	//注册读写数据库

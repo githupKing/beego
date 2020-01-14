@@ -1,12 +1,7 @@
 package models
 
 import (
-	"fmt"
 	"github.com/astaxie/beego/orm"
-)
-
-var (
-	UserList map[string]*User
 )
 
 func init() {
@@ -56,17 +51,16 @@ func DeleteUser(user *User) (int64, error) {
 	return num, err
 }
 
-func GetUserById(Id int64) (user User, error error) {
+func GetUserById(Id int64) (user User, err error) {
 	o := orm.NewOrm()
 	user = User{Id: Id}
-	err := o.Read(&user, "Id")
-	return user, err
+	err = o.Read(&user, "Id")
+	return
 }
 
-func GetUserByName(Username string) (user User, error error) {
+func GetUserByName(Username string) (user User, err error) {
 	o := orm.NewOrm()
-	fmt.Println(Username)
 	user = User{Username: Username}
-	err := o.Read(&user, "Username")
-	return user, err
+	err = o.Read(&user, "Username")
+	return
 }

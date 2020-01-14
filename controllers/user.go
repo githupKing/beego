@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/astaxie/beego"
+	// "golang.org/x/crypto/bcrypt"
 	"strconv"
 )
 
@@ -86,8 +87,6 @@ func (this *UserController) FindOne() {
 func (this *UserController) FindUserByName() {
 	Username := this.GetString("Username")
 	user, err := models.GetUserByName(Username)
-	fmt.Println(user)
-	fmt.Println(err)
 	if err != nil {
 		data := &jsons{100, "暂无数据", 1}
 		this.Data["json"] = data
