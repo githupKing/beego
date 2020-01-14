@@ -28,12 +28,11 @@ type User struct {
 	Openid       string `form:"Openid"`       // 小程序openid
 }
 
-func GetAllUsers() []User {
+func GetAllUsers(Username string) []User {
 	o := orm.NewOrm()
-	// 获取 QuerySeter 对象，user 为表名
 	qs := o.QueryTable("user")
 	var us []User
-	_, err := qs.All(&us)
+	_, err := qs.Filter("Username__icontains", Username).All(&us)
 	if err == nil {
 	}
 	return us
