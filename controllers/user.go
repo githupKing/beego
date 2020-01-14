@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/astaxie/beego"
-	// "golang.org/x/crypto/bcrypt"
+	"golang.org/x/crypto/bcrypt"
 	"strconv"
 )
 
@@ -36,15 +36,21 @@ func (this *UserController) GetAll() {
 func (this *UserController) PostData() {
 	user := models.User{}
 	data := this.Ctx.Input.RequestBody
-	err := json.Unmarshal(data, &user)
-	if err != nil {
-		fmt.Println("json.Unmarshal is err:", err.Error())
-	}
-	_, error := models.AddUser(&user)
-	if error != nil {
-		this.Ctx.WriteString("服务器错误")
+	if err := json.Unmarshal(data, &user); err != nil { //传入user指针
+		this.Ctx.WriteString("出错了！")
 	} else {
-		this.Ctx.WriteString("添加成功")
+		password := []byte(user.Password)
+		hashedPassword, err := bcrypt.GenerateFromPassword(password, bcrypt.DefaultCost) //密码加密
+		if err != nil {
+			panic(err)
+		}
+		user.Password = string(hashedPassword)
+		_, error := models.AddUser(&user)
+		if error != nil {
+			this.Ctx.WriteString("服务器错误")
+		} else {
+			this.Ctx.WriteString("添加成功")
+		}
 	}
 }
 

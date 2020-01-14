@@ -17,7 +17,7 @@ type User struct {
 	Phone        string `form:"Phone"`
 	Email        string `form:"Email"`
 	Avatarurl    string `form:"Avatarurl"`    // 头像
-	Roleid       string `form:"Roleid"`       //权限id
+	Roleid       int    `form:"Roleid"`       //权限id
 	Pid          string `form:"Pid"`          //父级id
 	Systemtype   string `form:"Systemtype"`   //系统类型
 	Address      string `form:"Address"`      //地址
