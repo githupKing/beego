@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"beego/models"
+	"beego/util"
 	"encoding/json"
 	"fmt"
 	"github.com/astaxie/beego"
@@ -17,6 +18,7 @@ type jsons struct {
 	Code       int
 	Msg        string
 	Error_code int
+	Token      string
 }
 
 // @Title GetAll
@@ -41,11 +43,12 @@ func (this *UserController) PostData() {
 	} else {
 		password := []byte(user.Password)
 		hashedPassword, err := bcrypt.GenerateFromPassword(password, bcrypt.DefaultCost) //密码加密
+		user.Password = string(hashedPassword)
 		if err != nil {
 			panic(err)
 		}
-		user.Password = string(hashedPassword)
 		_, error := models.AddUser(&user)
+
 		if error != nil {
 			this.Ctx.WriteString("服务器错误")
 		} else {
@@ -77,7 +80,7 @@ func (this *UserController) FindOne() {
 	id, _ := strconv.ParseInt(this.GetString("id"), 10, 64) //强类型转换
 	user, err := models.GetUserById(id)
 	if err != nil {
-		data := &jsons{100, "暂无数据", 1}
+		data := &jsons{100, "暂无数据", 1, ""}
 		this.Data["json"] = data
 		this.ServeJSON()
 	} else {
@@ -94,11 +97,50 @@ func (this *UserController) FindUserByName() {
 	Username := this.GetString("Username")
 	user, err := models.GetUserByName(Username)
 	if err != nil {
-		data := &jsons{100, "暂无数据", 1}
+		data := &jsons{100, "暂无数据", 1, ""}
 		this.Data["json"] = data
 		this.ServeJSON()
 	} else {
 		this.Data["json"] = user
 		this.ServeJSON()
 	}
+}
+
+// @Title login
+// @Description login data
+// @Success 200 {object} models.User
+// @router /login [post]
+func (this *UserController) Login() {
+	UserName := this.GetString("userName")
+	pwd := this.GetString("pwd")
+	user, err := models.GetUserByName(UserName)
+	password := []byte(pwd)
+	if err != nil {
+		data := &jsons{100, "账号不存在，请先注册", 1, ""}
+		this.Data["json"] = data
+		this.ServeJSON()
+	} else {
+		if comparePasswords(user.Password, password) == true {
+			st := util.Claims{}
+			st.Uid = user.Id
+			token, _ := util.CreateToken(&st)
+			data := &jsons{100, "登录成功", 0, token}
+			this.Data["json"] = data
+			this.ServeJSON()
+		} else {
+			data := &jsons{100, "账号或密码错误", 1, ""}
+			this.Data["json"] = data
+			this.ServeJSON()
+		}
+	}
+}
+
+func comparePasswords(hashedPwd string, plainPwd []byte) bool {
+	byteHash := []byte(hashedPwd)
+	err := bcrypt.CompareHashAndPassword(byteHash, plainPwd)
+	if err != nil {
+		fmt.Println(err)
+		return false
+	}
+	return true
 }

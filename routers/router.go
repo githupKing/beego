@@ -9,7 +9,9 @@ package routers
 
 import (
 	"beego/controllers"
+	"fmt"
 	"github.com/astaxie/beego"
+	"github.com/astaxie/beego/context"
 )
 
 func init() {
@@ -26,4 +28,9 @@ func init() {
 		),
 	)
 	beego.AddNamespace(ns)
+	var BeforeExecFunc = func(ctx *context.Context) {
+		token := ctx.Input.Header("Authorization")
+		fmt.Println(token)
+	}
+	beego.InsertFilter("*", beego.BeforeExec, BeforeExecFunc)
 }
