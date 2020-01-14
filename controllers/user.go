@@ -32,7 +32,7 @@ func (this *UserController) GetAll() {
 }
 
 // @Title GetAll
-// @Description get all Users
+// @Description get all Users 添加用户
 // @Success 200 {object} models.User
 // @router / [post]
 func (this *UserController) PostData() {
@@ -58,7 +58,7 @@ func (this *UserController) PostData() {
 }
 
 // @Title DeleteData
-// @Description delete data
+// @Description delete data 删除
 // @Success 200 {object} models.User
 // @router / [delete]
 func (this *UserController) DeleteData() {
@@ -73,7 +73,7 @@ func (this *UserController) DeleteData() {
 }
 
 // @Title findOne
-// @Description findOne data
+// @Description findOne data 根据用户id 查询
 // @Success 200 {object} models.User
 // @router /findone [get]
 func (this *UserController) FindOne() {
@@ -90,7 +90,7 @@ func (this *UserController) FindOne() {
 }
 
 // @Title findOne
-// @Description findOne data
+// @Description findOne data 根据用户名查询
 // @Success 200 {object} models.User
 // @router /finduserbyname [get]
 func (this *UserController) FindUserByName() {
@@ -107,12 +107,18 @@ func (this *UserController) FindUserByName() {
 }
 
 // @Title login
-// @Description login data
+// @Description login data 登录
 // @Success 200 {object} models.User
 // @router /login [post]
 func (this *UserController) Login() {
 	UserName := this.GetString("userName")
 	pwd := this.GetString("pwd")
+	if UserName == "" || pwd == "" {
+		data := &jsons{100, "用户名密码不能为空", 1, ""}
+		this.Data["json"] = data
+		this.ServeJSON()
+		return
+	}
 	user, err := models.GetUserByName(UserName)
 	password := []byte(pwd)
 	if err != nil {
@@ -120,10 +126,10 @@ func (this *UserController) Login() {
 		this.Data["json"] = data
 		this.ServeJSON()
 	} else {
-		if comparePasswords(user.Password, password) == true {
-			st := util.Claims{}
-			st.Uid = user.Id
-			token, _ := util.CreateToken(&st)
+		if comparePasswords(user.Password, password) {
+			claims := util.Claims{}
+			claims.Uid = user.Id
+			token, _ := util.CreateToken(&claims)
 			data := &jsons{100, "登录成功", 0, token}
 			this.Data["json"] = data
 			this.ServeJSON()

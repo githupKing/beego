@@ -9,10 +9,17 @@ package routers
 
 import (
 	"beego/controllers"
-	"fmt"
+	"beego/util"
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/context"
 )
+
+type jsons struct {
+	Code       int
+	Msg        string
+	Error_code int
+	Token      string
+}
 
 func init() {
 	ns := beego.NewNamespace("/v1",
@@ -28,9 +35,18 @@ func init() {
 		),
 	)
 	beego.AddNamespace(ns)
-	var BeforeExecFunc = func(ctx *context.Context) {
-		token := ctx.Input.Header("Authorization")
-		fmt.Println(token)
+	var BeforeExecFunc = func(this *context.Context) {
+		token := this.Input.Header("Authorization")
+		if token == "" {
+			data := &jsons{400, "请先登录", 1, ""}
+			this.Output.JSON(data, false, false)
+		}
+		_, status := util.ValidateToken(token)
+		if !status {
+			this.Output.SetStatus(200)
+			data := &jsons{400, "登录超时", 1, ""}
+			this.Output.JSON(data, false, false)
+		}
 	}
 	beego.InsertFilter("*", beego.BeforeExec, BeforeExecFunc)
 }

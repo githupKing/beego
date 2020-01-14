@@ -14,7 +14,7 @@ import (
 
 // Claims custom token
 type Claims struct {
-	Uid int64 `json:"u_id"` // 玩家
+	Uid int64 `json:"u_id"` // 用户id
 	jwt.StandardClaims
 }
 
