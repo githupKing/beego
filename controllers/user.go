@@ -27,7 +27,10 @@ type jsons struct {
 // @router / [get]
 func (this *UserController) GetAll() {
 	Username := this.GetString("Username")
-	users := models.GetAllUsers(Username)
+	users, err := models.GetAllUsers(Username)
+	if err != nil {
+		this.Ctx.WriteString("出错了！")
+	}
 	this.Data["json"] = users
 	this.ServeJSON()
 }

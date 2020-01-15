@@ -28,14 +28,12 @@ type User struct {
 	Openid       string `form:"Openid"`       // 小程序openid
 }
 
-func GetAllUsers(Username string) []User {
+func GetAllUsers(Username string) (us []User, err error) {
+	//查询多个
 	o := orm.NewOrm()
 	qs := o.QueryTable("user")
-	var us []User
-	_, err := qs.Filter("Username__icontains", Username).All(&us)
-	if err == nil {
-	}
-	return us
+	_, err = qs.Filter("Username__icontains", Username).All(&us)
+	return
 }
 
 func AddUser(user *User) (int64, error) {

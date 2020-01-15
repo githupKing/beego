@@ -37,12 +37,12 @@ func init() {
 	beego.AddNamespace(ns)
 	var BeforeExecFunc = func(this *context.Context) {
 		token := this.Input.Header("Authorization")
-		if token == "" {
+		if this.Request.RequestURI != "/v1/user/login" && token == "" {
 			data := &jsons{400, "请先登录", 1, ""}
 			this.Output.JSON(data, false, false)
 		}
 		_, status := util.ValidateToken(token)
-		if !status {
+		if this.Request.RequestURI != "/v1/user/login" && !status {
 			this.Output.SetStatus(200)
 			data := &jsons{400, "登录超时", 1, ""}
 			this.Output.JSON(data, false, false)
