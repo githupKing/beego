@@ -116,6 +116,7 @@ func (this *UserController) FindUserByName() {
 // @router /login [post]
 func (this *UserController) Login() {
 	UserName := this.GetString("userName")
+	fmt.Println(UserName)
 	pwd := this.GetString("pwd")
 	if UserName == "" || pwd == "" {
 		data := &jsons{100, "用户名密码不能为空", 1, ""}

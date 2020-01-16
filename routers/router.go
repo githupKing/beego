@@ -23,6 +23,7 @@ type jsons struct {
 
 func init() {
 	ns := beego.NewNamespace("/v1",
+		beego.NSBefore(crossDomain),
 		beego.NSNamespace("/user",
 			beego.NSInclude(
 				&controllers.UserController{},
@@ -49,4 +50,16 @@ func init() {
 		}
 	}
 	beego.InsertFilter("*", beego.BeforeExec, BeforeExecFunc)
+}
+func crossDomain(ctx *context.Context) {
+	// utils.Display("跨域设置", "成功")
+	//管理接口
+	ctx.Output.Header("Access-Control-Allow-Origin", "*")
+	ctx.Output.Header("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, OPTIONS")
+	ctx.Output.Header("Access-Control-Allow-Headers", "*, X-Requested-With,Authorization, X-Prototype-Version, X-CSRF-Token, Content-Type")
+
+	if ctx.Input.Method() == "OPTIONS" {
+		ctx.Output.SetStatus(200)
+		ctx.Output.JSON("{}", false, false)
+	}
 }
