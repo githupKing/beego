@@ -31,7 +31,7 @@ func (this *UserController) GetAll() {
 	if err != nil {
 		this.Ctx.WriteString("出错了！")
 	}
-	this.Data["json"] = users
+	this.Data["json"] = map[string]interface{}{"Code": 200, "Msg": "ok", "data": users, "Error_code": 0}
 	this.ServeJSON()
 }
 
